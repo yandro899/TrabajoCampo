@@ -44,6 +44,9 @@ class AptitudEdad(Fact):
     """Aptitud del turista segun la edad"""
     pass
 
+class RecomendacionCircuito(Fact):
+    """Recomendacion final del circuito"""
+    pass
 
 class TermasJordan(KnowledgeEngine):
     """
@@ -142,5 +145,45 @@ class TermasJordan(KnowledgeEngine):
     def nAptEdad_apto(self):
         self.declare(AptitudEdad("apto"))
         print("Edad APTA")
+
+    """
+    PARTE FINAL
+    Recomendacion del circuito
+    """
+
+    @Rule(AptitudClima("apto"), NivelAptGeneral("apto"), AptitudEdad("apto"))
+    def recAtract_muyBien(self):
+        self.declare(RecomendacionCircuito("muy_bien"))
+        print("EL ATRACTIVO SELECCIONADO ES MUY RECOMENDABLE PARA EL TURISTA")
+
+    @Rule(OR(
+            AND(AptitudClima("apto"), NivelAptGeneral("apto"), AptitudEdad("no_apto")),
+            AND(AptitudClima("no_apto"), NivelAptGeneral("apto"), AptitudEdad("apto")),
+            AND(AptitudClima("apto"), NivelAptGeneral("med_apto"), AptitudEdad("apto")),
+    ))
+    def recAtract_bien(self):
+        self.declare(RecomendacionCircuito("bien"))
+        print("EL ATRACTIVO SELECCIONADO ES RECOMENDABLE PARA EL TURISTA")
+
+    @Rule(OR(
+            AND(AptitudClima("no_apto"), NivelAptGeneral("apto"), AptitudEdad("no_apto")),
+            AND(AptitudClima("apto"), NivelAptGeneral("med_apto"), AptitudEdad("no_apto")),
+            AND(AptitudClima("no_apto"), NivelAptGeneral("med_apto"), AptitudEdad("apto")),
+            AND(AptitudClima("apto"), NivelAptGeneral("no_apto"), AptitudEdad("apto")),
+    ))
+    def recAtract_advertencia(self):
+        self.declare(RecomendacionCircuito("adv"))
+        print("EL ATRACTIVO SELECCIONADO TIENE CIERTOS PROBLEMAS PARA EL TURISTA")
+
+        
+    @Rule(OR(
+            AND(AptitudClima("no_apto"), NivelAptGeneral("med_apto"), AptitudEdad("no_apto")),
+            AND(AptitudClima("apto"), NivelAptGeneral("no_apto"), AptitudEdad("no_apto")),
+            AND(AptitudClima("no_apto"), NivelAptGeneral("no_apto"), AptitudEdad("apto")),
+            AND(AptitudClima("no_apto"), NivelAptGeneral("no_apto"), AptitudEdad("no_apto")),
+    ))
+    def recAtract_advertencia(self):
+        self.declare(RecomendacionCircuito("no_rec"))
+        print("EL ATRACTIVO SELECCIONADO NO ES NADA RECOMENDABLE PARA EL TURISTA")
 
 engine = TermasJordan()
