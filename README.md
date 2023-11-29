@@ -1,5 +1,7 @@
 # Trabajo Campo: Sistema experto para guias turisticos de Termas de Jordan
 ## Introducción
+Este trabajo es para la materia de Ingenieria del Conocimiento de la Universidad Nacional de Jujuy, que tiene como objetivo la recomendacion de atracciones.
+Por ahora, es solo un  prototipo por falta de tiempo, pero puede mejorar en el futuro.
 
 ## Instalación
 ### Requisitos
