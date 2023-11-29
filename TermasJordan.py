@@ -2,6 +2,8 @@ from experta import *
 import json
 import math
 
+g_iRecomendacion = 0
+
 class CondFisica(Fact):
     """Condicion fisica del turista"""
     pass
@@ -157,6 +159,8 @@ class TermasJodan(KnowledgeEngine):
     def recAtract_muyBien(self):
         self.declare(RecomendacionCircuito("muy_bien"))
         print("EL ATRACTIVO SELECCIONADO ES MUY RECOMENDABLE PARA EL TURISTA")
+        global g_iRecomendacion
+        g_iRecomendacion = 3
 
     @Rule(OR(
             AND(AptitudClima("apto"), NivelAptGeneral("apto"), AptitudEdad("no_apto")),
@@ -166,6 +170,8 @@ class TermasJodan(KnowledgeEngine):
     def recAtract_bien(self):
         self.declare(RecomendacionCircuito("bien"))
         print("EL ATRACTIVO SELECCIONADO ES RECOMENDABLE PARA EL TURISTA")
+        global g_iRecomendacion
+        g_iRecomendacion = 2
     
     @Rule(OR(
             AND(AptitudClima("no_apto"), NivelAptGeneral("apto"), AptitudEdad("no_apto")),
@@ -176,6 +182,8 @@ class TermasJodan(KnowledgeEngine):
     def recAtract_advertencia(self):
         self.declare(RecomendacionCircuito("adv"))
         print("EL ATRACTIVO SELECCIONADO TIENE CIERTOS PROBLEMAS PARA EL TURISTA")
+        global g_iRecomendacion
+        g_iRecomendacion = 1
 
         
     @Rule(OR(
@@ -187,6 +195,8 @@ class TermasJodan(KnowledgeEngine):
     def recAtract_noRec(self):
         self.declare(RecomendacionCircuito("no_rec"))
         print("EL ATRACTIVO SELECCIONADO NO ES NADA RECOMENDABLE PARA EL TURISTA")
+        global g_iRecomendacion
+        g_iRecomendacion = 0
 
 def calcPitagoras(x1, x2, y1, y2):
     return int(math.sqrt(math.pow(x2-x1,2)+math.pow(y2-y1,2)))
@@ -199,7 +209,6 @@ def findCaminoMasCorto(x0, y0, atractivos):
         x1 = int(atract["ubicacion"]["x"])
         y1 = int(atract["ubicacion"]["y"])
         newDist = calcPitagoras(x0,x1,y0,y1)
-        print(i, " i ", newDist)
         if ( newDist < nearDist):
             nearDist = newDist
             nearAtract = i
@@ -208,7 +217,7 @@ def findCaminoMasCorto(x0, y0, atractivos):
     return nearAtract
 
 def calcDistCircuito(atractivos):
-    
+    newAtractivos = atractivos.copy()
     # Este punto avanza por cada atractivo armando la distancia
     pos = {
         "x": 0,
@@ -217,17 +226,15 @@ def calcDistCircuito(atractivos):
 
     dist = 0
 
-    while len(atractivos) > 0:
-        index = findCaminoMasCorto(pos["x"], pos["y"], atractivos)
-        selectAtract = atractivos[index]["ubicacion"]
+    while len(newAtractivos) > 0:
+        index = findCaminoMasCorto(pos["x"], pos["y"], newAtractivos)
+        selectAtract = newAtractivos[index]["ubicacion"]
         dist = dist + calcPitagoras(pos["x"], int(selectAtract["x"]), pos["y"], int(selectAtract["y"]))
-        print("DIST ", dist)
         pos["x"] = int(selectAtract["x"])
         pos["y"] = int(selectAtract["y"])
-        atractivos.pop(index)
+        newAtractivos.pop(index)
 
     dist = dist + calcPitagoras(pos["x"], 0, pos["y"], 0)
-    print("DIST ", dist)
 
     return dist
 
@@ -246,7 +253,7 @@ Como se hara el programa?
 
 ** Mostramos atractivos que quiere visitar. Elige los que quiera ir.
 
-Procesa los atractivos armando un circuito
+** Procesa los atractivos armando un circuito
 
 Lanza las recomendaciones
 
@@ -280,7 +287,15 @@ estado_tiempo = {
 # TODO: Control de entradad de datos
 datos_turista["apellido"] = input("Cual es su apellido? ")
 datos_turista["nombre"] = input("Cual es su nombre? ")
-datos_turista["dni"] = int(input("Cual es su dni? "))
+
+error = True
+while error:
+    error = False
+    try:
+        datos_turista["dni"] = int(input("Cual es su dni? "))
+    except:
+        error = True
+
 datos_turista["edad"] = int(input("Cual es su edad? "))
 datos_turista["grupo_sanguineo"] = input("Cual es su grupo sanguineo? ")
 datos_turista["factor_sanguineo"] = input("Cual es su factor sanguineo? ")
@@ -343,5 +358,32 @@ for select_atract in datos_turista["atractivos"]:
     engine.declare(AtraccionTipo(select_atract["tipo"]))
 
     engine.run()
-    print(engine.facts)
-    print(calcDistCircuito(datos_turista["atractivos"]))
+
+    datos_turista["rec_atractivos"].append(g_iRecomendacion)
+    
+distTotal = calcDistCircuito(datos_turista["atractivos"])
+print("El circuito elegido (", datos_turista["atractivos"][0]["nombre"], ") tiene la recomendacion:")
+
+if (datos_turista["rec_atractivos"][0] == 3):
+    print(" ***** MUY buena eleccion ***** ")
+elif (datos_turista["rec_atractivos"][0] == 2):
+    print(" ***** Buena eleccion ***** ")
+elif (datos_turista["rec_atractivos"][0] == 1):
+    print(" ***** Eleccion con algunos problemas ***** ")
+else:
+    print(" ***** NO recomendable ***** ")
+
+print("La distancia de recorrido total es de ", distTotal, " metros, y el tiempo aproximado de recorrido es de minimamente ", int(distTotal/4000), " horas.")
+
+with open('datosturistas.txt', 'w') as f:
+    f.write("Nombre: {}".format(datos_turista["nombre"]))
+    f.write("\nApellido: {}".format(datos_turista["apellido"]))
+    f.write("\nEdad: {}".format(datos_turista["edad"]))
+    f.write("\nGrupo Sanguineo: {}".format(datos_turista["grupo_sanguineo"]))
+    f.write("\nFactor Sanguineo: {}".format(datos_turista["factor_sanguineo"]))
+    f.write("\DNI: ".format(datos_turista["dni"]))
+    if (datos_turista["act_deport"]):
+        f.write("\nHace deportes: Si")
+    else:
+        f.write("\nHace deportes: No")
+    f.write("\nEnfermedad: ".format(datos_turista["est_medico"]))
