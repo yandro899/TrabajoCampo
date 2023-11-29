@@ -158,7 +158,7 @@ class TermasJodan(KnowledgeEngine):
     @Rule(AptitudClima("apto"), NivelAptGeneral("apto"), AptitudEdad("apto"))
     def recAtract_muyBien(self):
         self.declare(RecomendacionCircuito("muy_bien"))
-        print("EL ATRACTIVO SELECCIONADO ES MUY RECOMENDABLE PARA EL TURISTA")
+        #print("EL ATRACTIVO SELECCIONADO ES MUY RECOMENDABLE PARA EL TURISTA")
         global g_iRecomendacion
         g_iRecomendacion = 3
 
@@ -169,7 +169,7 @@ class TermasJodan(KnowledgeEngine):
     ))
     def recAtract_bien(self):
         self.declare(RecomendacionCircuito("bien"))
-        print("EL ATRACTIVO SELECCIONADO ES RECOMENDABLE PARA EL TURISTA")
+        #print("EL ATRACTIVO SELECCIONADO ES RECOMENDABLE PARA EL TURISTA")
         global g_iRecomendacion
         g_iRecomendacion = 2
     
@@ -181,7 +181,7 @@ class TermasJodan(KnowledgeEngine):
     ))
     def recAtract_advertencia(self):
         self.declare(RecomendacionCircuito("adv"))
-        print("EL ATRACTIVO SELECCIONADO TIENE CIERTOS PROBLEMAS PARA EL TURISTA")
+        #print("EL ATRACTIVO SELECCIONADO TIENE CIERTOS PROBLEMAS PARA EL TURISTA")
         global g_iRecomendacion
         g_iRecomendacion = 1
 
@@ -194,7 +194,7 @@ class TermasJodan(KnowledgeEngine):
     ))
     def recAtract_noRec(self):
         self.declare(RecomendacionCircuito("no_rec"))
-        print("EL ATRACTIVO SELECCIONADO NO ES NADA RECOMENDABLE PARA EL TURISTA")
+        #print("EL ATRACTIVO SELECCIONADO NO ES NADA RECOMENDABLE PARA EL TURISTA")
         global g_iRecomendacion
         g_iRecomendacion = 0
 
@@ -381,9 +381,9 @@ with open('datosturistas.txt', 'w') as f:
     f.write("\nEdad: {}".format(datos_turista["edad"]))
     f.write("\nGrupo Sanguineo: {}".format(datos_turista["grupo_sanguineo"]))
     f.write("\nFactor Sanguineo: {}".format(datos_turista["factor_sanguineo"]))
-    f.write("\DNI: ".format(datos_turista["dni"]))
+    f.write("\nDNI: {}".format(datos_turista["dni"]))
     if (datos_turista["act_deport"]):
         f.write("\nHace deportes: Si")
     else:
         f.write("\nHace deportes: No")
-    f.write("\nEnfermedad: ".format(datos_turista["est_medico"]))
+    f.write("\nEnfermedad: {}".format(datos_turista["est_medico"]))
