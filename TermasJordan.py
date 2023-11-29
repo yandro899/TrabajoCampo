@@ -1,5 +1,6 @@
 from experta import *
 import json
+import math
 
 class CondFisica(Fact):
     """Condicion fisica del turista"""
@@ -187,6 +188,49 @@ class TermasJodan(KnowledgeEngine):
         self.declare(RecomendacionCircuito("no_rec"))
         print("EL ATRACTIVO SELECCIONADO NO ES NADA RECOMENDABLE PARA EL TURISTA")
 
+def calcPitagoras(x1, x2, y1, y2):
+    return int(math.sqrt(math.pow(x2-x1,2)+math.pow(y2-y1,2)))
+
+def findCaminoMasCorto(x0, y0, atractivos):
+    nearAtract = 0
+    i = 0
+    nearDist = 100000
+    for atract in atractivos:
+        x1 = int(atract["ubicacion"]["x"])
+        y1 = int(atract["ubicacion"]["y"])
+        newDist = calcPitagoras(x0,x1,y0,y1)
+        print(i, " i ", newDist)
+        if ( newDist < nearDist):
+            nearDist = newDist
+            nearAtract = i
+        i = i+1
+    
+    return nearAtract
+
+def calcDistCircuito(atractivos):
+    
+    # Este punto avanza por cada atractivo armando la distancia
+    pos = {
+        "x": 0,
+        "y": 0
+    }
+
+    dist = 0
+
+    while len(atractivos) > 0:
+        index = findCaminoMasCorto(pos["x"], pos["y"], atractivos)
+        selectAtract = atractivos[index]["ubicacion"]
+        dist = dist + calcPitagoras(pos["x"], int(selectAtract["x"]), pos["y"], int(selectAtract["y"]))
+        print("DIST ", dist)
+        pos["x"] = int(selectAtract["x"])
+        pos["y"] = int(selectAtract["y"])
+        atractivos.pop(index)
+
+    dist = dist + calcPitagoras(pos["x"], 0, pos["y"], 0)
+    print("DIST ", dist)
+
+    return dist
+
 engine = TermasJodan()
 
 """
@@ -300,3 +344,4 @@ for select_atract in datos_turista["atractivos"]:
 
     engine.run()
     print(engine.facts)
+    print(calcDistCircuito(datos_turista["atractivos"]))
