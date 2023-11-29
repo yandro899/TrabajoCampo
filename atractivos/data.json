@@ -21,8 +21,8 @@
             }
         },
         {
-            "nombre":       "Cascada de Los Loros",
-            "tipo":         "cascada",
+            "nombre":       "Cañon de Los Loros",
+            "tipo":         "canon",
             "dificultad":   "Media",
             "indumentaria_min":     "",
             "ubicacion":    {

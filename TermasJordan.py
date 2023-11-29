@@ -49,7 +49,7 @@ class RecomendacionCircuito(Fact):
     """Recomendacion final del circuito"""
     pass
 
-class TermasJordan(KnowledgeEngine):
+class TermasJodan(KnowledgeEngine):
     """
     Aptitud Fisica
     Al analiar las reglas, para simplificar operaciones logicas se pudo corroborar
@@ -102,9 +102,25 @@ class TermasJordan(KnowledgeEngine):
             AND(NivelAptFisica("no_sano"), DificultadAtractivo("media"))
             )
         )
-    def nAptGen_apto(self):
+    def nAptGen_noApto(self):
         self.declare(NivelAptGeneral("apto"))
         print("Turista NO APTO para el circuito")
+    
+    """
+    Aptitud segun edad
+    """
+
+    @Rule(OR(
+        Edad("<5"), Edad(">50")
+    ))
+    def nAptEdad_noApto(self):
+        self.declare(AptitudEdad("no_apto"))
+        print("Edad NO APTA")
+
+    @Rule(Edad("5-50"))
+    def nAptEdad_apto(self):
+        self.declare(AptitudEdad("apto"))
+        print("Edad APTA")
 
     """
     Aptitud del clima
@@ -132,22 +148,6 @@ class TermasJordan(KnowledgeEngine):
         print("Clima NO APTO para el circuito")
     
     """
-    Aptitud segun edad
-    """
-
-    @Rule(OR(
-        Edad("<5"), Edad(">50")
-    ))
-    def nAptEdad_noApto(self):
-        self.declare(AptitudEdad("no_apto"))
-        print("Edad NO APTA")
-
-    @Rule(Edad("5-50"))
-    def nAptEdad_apto(self):
-        self.declare(AptitudEdad("apto"))
-        print("Edad APTA")
-
-    """
     PARTE FINAL
     Recomendacion del circuito
     """
@@ -165,7 +165,7 @@ class TermasJordan(KnowledgeEngine):
     def recAtract_bien(self):
         self.declare(RecomendacionCircuito("bien"))
         print("EL ATRACTIVO SELECCIONADO ES RECOMENDABLE PARA EL TURISTA")
-
+    
     @Rule(OR(
             AND(AptitudClima("no_apto"), NivelAptGeneral("apto"), AptitudEdad("no_apto")),
             AND(AptitudClima("apto"), NivelAptGeneral("med_apto"), AptitudEdad("no_apto")),
@@ -183,24 +183,24 @@ class TermasJordan(KnowledgeEngine):
             AND(AptitudClima("no_apto"), NivelAptGeneral("no_apto"), AptitudEdad("apto")),
             AND(AptitudClima("no_apto"), NivelAptGeneral("no_apto"), AptitudEdad("no_apto")),
     ))
-    def recAtract_advertencia(self):
+    def recAtract_noRec(self):
         self.declare(RecomendacionCircuito("no_rec"))
         print("EL ATRACTIVO SELECCIONADO NO ES NADA RECOMENDABLE PARA EL TURISTA")
 
-#engine = TermasJordan()
+engine = TermasJodan()
 
 """
 Como se hara el programa?
 
-Cargamos primero los atractivos en el json
+* Cargamos primero los atractivos en el json
 
-Pedimos nombre del turista (por ahora uno solo)
+* Pedimos nombre del turista (por ahora uno solo)
 
-Ingresamos datos medicos y fisicos
+* Ingresamos datos medicos y fisicos
 
-Ingresamos clima y epoca del año
+* Ingresamos clima y epoca del año
 
-Mostramos atractivos que quiere visitar. Elige los que quiera ir.
+** Mostramos atractivos que quiere visitar. Elige los que quiera ir.
 
 Procesa los atractivos armando un circuito
 
@@ -214,15 +214,89 @@ parsed_json = json.loads(file_contents)
 
 data_atractivos = parsed_json['atractivos']
 
-#print(data_atractivos[0]['nombre'])
-""" f = open('atractivos\data.json')
-data = json.load(f)
-for i in data['atractivos']:
-    print(i)
-
-f.close() """
-
 # Datos del turista
+datos_turista = {
+    "nombre": "",
+    "apellido": "",
+    "dni":  0,
+    "edad": 0,
+    "grupo_sanguineo": "",
+    "factor_sanguineo": "",
+    "act_deport": 0,
+    "est_medico": "",
+    "atractivos": [],
+    "rec_atractivos": []
+}
 
+estado_tiempo = {
+    "clima": "",
+    "epoca": "",
+}
 
+# TODO: Control de entradad de datos
+datos_turista["apellido"] = input("Cual es su apellido? ")
+datos_turista["nombre"] = input("Cual es su nombre? ")
+datos_turista["dni"] = int(input("Cual es su dni? "))
+datos_turista["edad"] = int(input("Cual es su edad? "))
+datos_turista["grupo_sanguineo"] = input("Cual es su grupo sanguineo? ")
+datos_turista["factor_sanguineo"] = input("Cual es su factor sanguineo? ")
+datos_turista["act_deport"] = bool(input("hace deportes o alguna actividad fisica? "))
+datos_turista["est_medico"] = input("padece alguna enfermedad? ")
 
+estado_tiempo["clima"] = input("Cual es el clima actual? ")
+estado_tiempo["epoca"] = input("Cual es la estacion del año actual? ")
+
+#print(datos_turista)
+#print(estado_tiempo)
+
+print("Se ven las siguientes atracciones, elija una")
+for atractivo in data_atractivos:
+    print(atractivo["nombre"])
+
+opcionAtractivo = int(input("Numero de atraccion, la primera es 0"))
+
+datos_turista["atractivos"].append(data_atractivos[opcionAtractivo])
+
+hechos_individuales = []
+
+# Setea hechos de edad
+if datos_turista["edad"] < 5:
+    hechos_individuales.append(Edad("<5"))
+elif datos_turista["edad"] > 50:
+    hechos_individuales.append(Edad(">50"))
+else:
+    hechos_individuales.append(Edad("5-50"))
+
+# Setea hechos de clima y epoca
+hechos_individuales.append(Clima(estado_tiempo["clima"]))
+hechos_individuales.append(Epoca(estado_tiempo["epoca"]))
+
+# Setea hechos turista
+hechos_individuales.append(CondMedica(datos_turista["est_medico"]))
+if datos_turista["act_deport"]:
+    hechos_individuales.append(CondFisica("si"))
+else:
+    hechos_individuales.append(CondFisica("no"))
+
+# Setea hechos por atractivo
+for select_atract in datos_turista["atractivos"]:
+    
+    engine.reset()
+
+    for hecho in hechos_individuales:
+        engine.declare(hecho)
+    
+    print(select_atract["dificultad"])
+    print(select_atract["tipo"])
+
+    if (select_atract["dificultad"] == "Alta"):
+        engine.declare(DificultadAtractivo("alta"))
+    elif (select_atract["dificultad"] == "Media"):
+        engine.declare(DificultadAtractivo("media"))
+    else:
+        engine.declare(DificultadAtractivo("baja"))
+
+    engine.declare(AtraccionTipo(select_atract["tipo"]))
+
+    engine.run()
+    print(engine.facts)
