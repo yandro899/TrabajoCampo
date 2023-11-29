@@ -106,7 +106,7 @@ class TermasJodan(KnowledgeEngine):
             )
         )
     def nAptGen_noApto(self):
-        self.declare(NivelAptGeneral("apto"))
+        self.declare(NivelAptGeneral("no_apto"))
         print("Turista NO APTO para el circuito")
     
     """
@@ -299,14 +299,11 @@ while error:
 datos_turista["edad"] = int(input("Cual es su edad? "))
 datos_turista["grupo_sanguineo"] = input("Cual es su grupo sanguineo? ")
 datos_turista["factor_sanguineo"] = input("Cual es su factor sanguineo? ")
-datos_turista["act_deport"] = bool(input("hace deportes o alguna actividad fisica? "))
-datos_turista["est_medico"] = input("padece alguna enfermedad? ")
+datos_turista["act_deport"] = bool(input("Hace deportes o alguna actividad fisica? "))
+datos_turista["est_medico"] = input("Padece alguna enfermedad? ")
 
 estado_tiempo["clima"] = input("Cual es el clima actual? ")
 estado_tiempo["epoca"] = input("Cual es la estacion del año actual? ")
-
-#print(datos_turista)
-#print(estado_tiempo)
 
 print("Se ven las siguientes atracciones, elija una")
 i = 1
@@ -372,17 +369,26 @@ elif (datos_turista["rec_atractivos"][0] == 1):
 else:
     print(" ***** NO recomendable ***** ")
 
-print("La distancia de recorrido total es de", distTotal, "metros, y el tiempo aproximado de recorrido es de minimamente", int(distTotal/4000), "horas.")
+print("La distancia de recorrido total es de", distTotal, "metros, y el tiempo aproximado de recorrido es de minimamente {time:.2f} horas.".format(time = distTotal/4000))
 
-with open('datosturistas.txt', 'w') as f:
-    f.write("Nombre: {}".format(datos_turista["nombre"]))
-    f.write("\nApellido: {}".format(datos_turista["apellido"]))
-    f.write("\nEdad: {}".format(datos_turista["edad"]))
-    f.write("\nGrupo Sanguineo: {}".format(datos_turista["grupo_sanguineo"]))
-    f.write("\nFactor Sanguineo: {}".format(datos_turista["factor_sanguineo"]))
-    f.write("\nDNI: {}".format(datos_turista["dni"]))
-    if (datos_turista["act_deport"]):
-        f.write("\nHace deportes: Si")
-    else:
-        f.write("\nHace deportes: No")
-    f.write("\nEnfermedad: {}".format(datos_turista["est_medico"]))
+try:
+    with open('datosturistas.txt', 'w') as f:
+        f.write("Nombre: {}".format(datos_turista["nombre"]))
+        f.write("\nApellido: {}".format(datos_turista["apellido"]))
+        f.write("\nEdad: {}".format(datos_turista["edad"]))
+        f.write("\nGrupo Sanguineo: {}".format(datos_turista["grupo_sanguineo"]))
+        f.write("\nFactor Sanguineo: {}".format(datos_turista["factor_sanguineo"]))
+        f.write("\nDNI: {}".format(datos_turista["dni"]))
+        if (datos_turista["act_deport"]):
+            f.write("\nHace deportes: Si")
+        else:
+            f.write("\nHace deportes: No")
+        if (datos_turista["est_medico"])=='sano':
+            f.write("\nNo padece de enfermedades")
+        else:
+            f.write("\nEnfermedad: {}".format(datos_turista["est_medico"]))
+except:
+    print("Hubo un error en la impresion del txt. Compruebe si el directorio no es de solo lectura.")
+
+input("Presione enter para salir")
+

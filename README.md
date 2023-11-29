@@ -1,35 +1,46 @@
-# TrabajoCampo
-Trabajo de campo de la materia Ingenieria del Conocimiento de la Universidad Nacional de Jujuy, referida a turismo de las Termas de Jordan
+# Trabajo Campo: Sistema experto para guias turisticos de Termas de Jordan
+## Introducción
 
-Aqui iria el futuro manual de usuario, pero enseño que deben hacer para usar esto.
+## Instalación
+### Requisitos
+* Se requiere la instalacion de Python 3.8. Otra version puede causar problemas.
+* Instalar la libreria "experta" de Python usando >pip install experta
+* Descargar este repositorio
 
-Primero instalen Python, especificamente la version 3.8 porque es la que funciona. NO INSTALEN VERSIONES SUPERIORES A LA 3.10
+### Ejecución
+Debe dirigirse al directorio del repositorio descargado y ejecutar "exec.bat". Se abrirá una ventana de consola de Windows.
 
-Segundo, instalen "experta", que es la libreria de Python.
+## Uso
+Le pedirá ingresar los siguientes datos personales:
+* Apellido
+* Nombre
+* DNI
+* Edad
+* Grupo Sanguineo
+* Facto Sanguineo
 
-Luego ejecuten Python en el directorio de este proyecto y pongan "exec(open(TermasJordan.py").read()) para que cargue el archivo
+Luego le preguntará si hace deportes o tiene actividad fisica. Ponga 0 si no la hace, 1 que si lo hace.
+Despues le preguntará si padece de alguna enfermedad, siendo las posibilidades:
+* asma: Padece Asma
+* sobrepeso: Padece sobrepeso
+* sano: Esta saludable
 
-Deben resetear el interprete usando:
+Luego le preguntará sobre el clima actual, siendo las opciones:
+* soleado
+* nublado
+* lluvia
 
->>> engine.reset()
+Despues le preguntará la estacion del año, siendo las opciones:
+* verano
+* otoño
+* invierno
+* primavera
 
-Asi lo pueden usar. Para cargar hechos usen "engine.declare([HECHO])" donde "HECHO" puede ser por ejemplo:
+Por ultimo, debe elegir que atraccion desea hacer. En el programa aparecen las opciones y debe elegir una.
 
->>> engine.declare(CondMedica("asma"))  # La persona padece Asma
+Finalmente el programa se ejecuta, recomendando al usuario si la atraccion que eligio es recomendable, ademas de imprimir en un papel (archivo "datosturistas.txt") los datos personales del turista para que el guía los tenga en casos de emergencia.
 
-Para hacer funcionar el motor de inferencias (una vez cargados todos los hechos necesarios), pongan:
-
->>> engine.run()
-
-Para ver que hechos se pusieron, pueden poner en la consola de Python:
-
->>> engine.facts
-
-PROXIMAMENTE SE VA A HACER MAS FUNCIONAL ESTO
-
-TODO:
-
-* Cargar los atractivos usando un json
-* Agregar interactividad al programa
-* Entregar recomendaciones
-* Mostrar peligros para los turistas si es necesario
+## Futuros agregados
+* Que se puede trabajar con mas de un turista
+* Que se pueda elegir mas de una atraccion por turista
+* En caso de circuitos no aptos, recomendar otros
