@@ -309,12 +309,14 @@ estado_tiempo["epoca"] = input("Cual es la estacion del año actual? ")
 #print(estado_tiempo)
 
 print("Se ven las siguientes atracciones, elija una")
+i = 1
 for atractivo in data_atractivos:
-    print(atractivo["nombre"])
+    print(i," - ", atractivo["nombre"])
+    i = i+1
 
-opcionAtractivo = int(input("Numero de atraccion, la primera es 0"))
+opcionAtractivo = int(input("Numero de atraccion: "))
 
-datos_turista["atractivos"].append(data_atractivos[opcionAtractivo])
+datos_turista["atractivos"].append(data_atractivos[opcionAtractivo-1])
 
 hechos_individuales = []
 
@@ -344,9 +346,6 @@ for select_atract in datos_turista["atractivos"]:
 
     for hecho in hechos_individuales:
         engine.declare(hecho)
-    
-    print(select_atract["dificultad"])
-    print(select_atract["tipo"])
 
     if (select_atract["dificultad"] == "Alta"):
         engine.declare(DificultadAtractivo("alta"))
@@ -373,7 +372,7 @@ elif (datos_turista["rec_atractivos"][0] == 1):
 else:
     print(" ***** NO recomendable ***** ")
 
-print("La distancia de recorrido total es de ", distTotal, " metros, y el tiempo aproximado de recorrido es de minimamente ", int(distTotal/4000), " horas.")
+print("La distancia de recorrido total es de", distTotal, "metros, y el tiempo aproximado de recorrido es de minimamente", int(distTotal/4000), "horas.")
 
 with open('datosturistas.txt', 'w') as f:
     f.write("Nombre: {}".format(datos_turista["nombre"]))
