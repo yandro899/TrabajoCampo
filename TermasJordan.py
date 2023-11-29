@@ -1,4 +1,5 @@
 from experta import *
+import json
 
 class CondFisica(Fact):
     """Condicion fisica del turista"""
@@ -186,4 +187,42 @@ class TermasJordan(KnowledgeEngine):
         self.declare(RecomendacionCircuito("no_rec"))
         print("EL ATRACTIVO SELECCIONADO NO ES NADA RECOMENDABLE PARA EL TURISTA")
 
-engine = TermasJordan()
+#engine = TermasJordan()
+
+"""
+Como se hara el programa?
+
+Cargamos primero los atractivos en el json
+
+Pedimos nombre del turista (por ahora uno solo)
+
+Ingresamos datos medicos y fisicos
+
+Ingresamos clima y epoca del año
+
+Mostramos atractivos que quiere visitar. Elige los que quiera ir.
+
+Procesa los atractivos armando un circuito
+
+Lanza las recomendaciones
+
+"""
+with open('atractivos\data.json') as user_file:
+  file_contents = user_file.read()
+
+parsed_json = json.loads(file_contents)
+
+data_atractivos = parsed_json['atractivos']
+
+#print(data_atractivos[0]['nombre'])
+""" f = open('atractivos\data.json')
+data = json.load(f)
+for i in data['atractivos']:
+    print(i)
+
+f.close() """
+
+# Datos del turista
+
+
+

@@ -1,0 +1,84 @@
+{
+    "atractivos": [
+        {
+            "nombre":       "Termas de Jordan",
+            "tipo":         "termas",
+            "dificultad":   "Alta",
+            "indumentaria_min":     "Ropa y calzado",
+            "ubicacion":    {
+                "x":    4293,
+                "y":    449
+            }
+        },
+        {
+            "nombre":       "Cascada La Toma",
+            "tipo":         "cascada",
+            "dificultad":   "Baja",
+            "indumentaria_min":     "Abrigo, repelente y buen calzado",
+            "ubicacion":    {
+                "x":    1126,
+                "y":    -1349
+            }
+        },
+        {
+            "nombre":       "Cascada de Los Loros",
+            "tipo":         "cascada",
+            "dificultad":   "Media",
+            "indumentaria_min":     "",
+            "ubicacion":    {
+                "x":    2681,
+                "y":    -1219
+            }
+        },
+        {
+            "nombre":       "Mirador La Cruz Mayor",
+            "tipo":         "mirador",
+            "dificultad":   "Media",
+            "indumentaria_min":     "",
+            "ubicacion":    {
+                "x":    1069,
+                "y":    -718
+            }
+        },
+        {
+            "nombre":       "Mirador La Ladera",
+            "tipo":         "mirador",
+            "dificultad":   "Media",
+            "indumentaria_min":     "",
+            "ubicacion":    {
+                "x":    402,
+                "y":    -977
+            }
+        },
+        {
+            "nombre":       "Fuente del Jaguar",
+            "tipo":         "cascada",
+            "dificultad":   "Media",
+            "indumentaria_min":     "Calzado con buen agarre",
+            "ubicacion":    {
+                "x":    2596,
+                "y":    -1259
+            }
+        },
+        {
+            "nombre":       "Refugio del Tapir",
+            "tipo":         "cascada",
+            "dificultad":   "Media",
+            "indumentaria_min":     "",
+            "ubicacion":    {
+                "x":    2459,
+                "y":    -1376
+            }
+        },
+        {
+            "nombre":       "Pozo del Tigre",
+            "tipo":         "cascada",
+            "dificultad":   "Media",
+            "indumentaria_min":     "",
+            "ubicacion":    {
+                "x":    2397,
+                "y":    -1446
+            }
+        }
+    ] 
+}
